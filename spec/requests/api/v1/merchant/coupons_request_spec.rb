@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Merchant couponss endpoints" do
+RSpec.describe "Merchant coupons endpoints" do
   it "should return all coupons for a given merchant" do
     merchant1 = create(:merchant)
     coupon1 = create(:coupon, merchant_id: merchant1.id)
