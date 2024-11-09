@@ -112,6 +112,7 @@ RSpec.describe "Merchant coupons endpoints" do
         code: "GIVE5AWAY",
         discount_type: "dollar",
         discount_value: 5,
+        active: true,
         extra_field: "malicious stuff",
         merchant_id: @merchant1.id
       }
@@ -123,5 +124,25 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:data][:attributes]).to_not include(:extra_field)
       expect(json[:data][:attributes]).to include(:name, :code, :discount_type, :discount_value, :active, :merchant_id)
     end
+  end
+
+  it "should only be able to have five active coupons" do
+    coupon4 = create(:coupon, merchant_id: @merchant1.id)
+    coupon5 = create(:coupon, merchant_id: @merchant1.id)
+
+    coupon6 = {
+      name: "Mail in advertising",
+      code: "COME2STORE",
+      discount_type: "percent",
+      discount_value: 20,
+      active: true,
+      merchant_id: @merchant1.id
+    }
+
+    post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon6, as: :json
+
+    expect(response).to have_http_status(:too_many_requests)
+
+
   end
 end
