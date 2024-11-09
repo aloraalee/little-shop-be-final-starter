@@ -52,6 +52,17 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:data][:attributes][:merchant_id]).to eq(@merchant1.id)
     end
   
+    it "should return one coupon and show how many times that coupon has been used" do
+      get "/api/v1/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}"
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json[:meta]).to be_a(Hash)
+      expect(json[:meta][:coupon_used_count]).to eq("count goes here")
+      # The above assertion needs to be edited once the count method is in place
+    end
+
+
     it "should return 404 and error message when coupon is not found" do
       get "/api/v1/merchants/#{@merchant1.id}/coupons/100000"
 
