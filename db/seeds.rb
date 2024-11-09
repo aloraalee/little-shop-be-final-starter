@@ -21,3 +21,15 @@ system(cmd)
 # Coupon.create! name: "Holiday Special", code: "HOLIDAY50", discount_type: "dollar", discount_value: 50.00, merchant_id: 2
 # Coupon.create! name: "Loyalty Reward", code: "LOYAL10", discount_type: "dollar", discount_value: 15.00, merchant_id: 6
 # Coupon.create! name: "Free Shipping", code: "SHIPFREE", discount_type: "dollar", discount_value: 7.00, merchant_id: 4
+
+# Invoice.create! customer_id: 3, merchant_id: 8, status: "shipped", coupon_id: 3
+# Invoice.create! customer_id: 4, merchant_id: 8, status: "shipped", coupon_id: 3
+# Invoice.create! customer_id: 5, merchant_id: 8, status: "shipped", coupon_id: 3
+
+# Invoice.create! customer_id: 6, merchant_id: 8, status: "shipped", coupon_id: 4
+# Invoice.create! customer_id: 7, merchant_id: 8, status: "shipped", coupon_id: 4
+
+#Invoice.create! customer_id: 7, merchant_id: 8, status: "shipped", coupon_id: 5 
+# This should not have worked because it has a coupon_id that does not match. 
+# Merchant 8 only has coupons 3 and 4
+# I deleted the instance I created, but I need to make a validation for this. 
