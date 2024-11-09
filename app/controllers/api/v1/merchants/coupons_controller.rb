@@ -18,4 +18,15 @@ class Api::V1::Merchants::CouponsController < ApplicationController
     }
     render json: show_coupon_used_count
   end
+
+  def create
+    coupon = Coupon.create!(coupon_params)
+    render json: CouponSerializer.new(coupon), status: :created
+  end
+
+  private
+
+  def coupon_params
+    params.permit(:name, :code, :discount_type, :discount_value, :merchant_id)
+  end
 end

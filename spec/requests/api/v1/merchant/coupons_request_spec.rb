@@ -80,4 +80,45 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:errors].first).to eq("Couldn't find Coupon with 'id'=100000 [WHERE \"coupons\".\"merchant_id\" = $1]")
     end
   end
+
+  describe "POST coupon" do
+    it "should create a new coupon for a given merchant when all fields are provided" do
+
+      body1 = {
+        name: "New Coupon",
+        code: "GIVE5AWAY",
+        discount_type: "dollar",
+        discount_value: 5,
+        merchant_id: @merchant1.id
+      }
+      
+      post "/api/v1/merchants/#{@merchant1.id}/coupons", params: body1, as: :json
+      json = JSON.parse(response.body, symbolize_names: true)
+  
+      expect(response).to have_http_status(:created)
+      expect(json[:data][:attributes][:name]).to eq(body1[:name])
+      expect(json[:data][:attributes][:code]).to eq(body1[:code])
+      expect(json[:data][:attributes][:discount_type]).to eq(body1[:discount_type])
+      expect(json[:data][:attributes][:discount_value]).to eq(body1[:discount_value])
+      expect(json[:data][:attributes][:merchant_id]).to eq(body1[:merchant_id])
+    end
+
+    it "should ignore unnecessary fields" do
+      body1 = {
+        name: "New Coupon",
+        code: "GIVE5AWAY",
+        discount_type: "dollar",
+        discount_value: 5,
+        extra_field: "malicious stuff",
+        merchant_id: @merchant1.id
+      }
+
+      post "/api/v1/merchants/#{@merchant1.id}/coupons", params: body1, as: :json
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to have_http_status(:created)
+      expect(json[:data][:attributes]).to_not include(:extra_field)
+      expect(json[:data][:attributes]).to include(:name, :code, :discount_type, :discount_value, :merchant_id)
+    end
+  end
 end
