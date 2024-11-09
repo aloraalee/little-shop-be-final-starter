@@ -6,8 +6,15 @@ RSpec.describe "Merchant coupons endpoints" do
     @coupon1 = create(:coupon, merchant_id: @merchant1.id)
     @coupon2 = create(:coupon, merchant_id: @merchant1.id)
     @coupon3 = create(:coupon, merchant_id: @merchant1.id)
+    
     @merchant2 = create(:merchant)
     @coupon4= create(:coupon, merchant_id: @merchant2.id)
+
+    @invoice_m1_1 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon1.id)
+    @invoice_m1_2 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon1.id)
+    @invoice_m1_3 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon2.id)
+    @invoice_m1_4 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon3.id)
+    @invoice_m1_5 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon3.id)
   end
 
   describe "GET all coupons" do
@@ -58,8 +65,7 @@ RSpec.describe "Merchant coupons endpoints" do
       json = JSON.parse(response.body, symbolize_names: true)
 
       expect(json[:meta]).to be_a(Hash)
-      expect(json[:meta][:coupon_used_count]).to eq("count goes here")
-      # The above assertion needs to be edited once the count method is in place
+      expect(json[:meta][:coupon_used_count]).to eq(2)
     end
 
 
@@ -71,7 +77,7 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(response).to have_http_status(:not_found)
       expect(json[:message]).to eq("Your query could not be completed")
       expect(json[:errors]).to be_a Array
-      expect(json[:errors].first).to eq("Couldn't find Coupon with 'id'=100000")
+      expect(json[:errors].first).to eq("Couldn't find Coupon with 'id'=100000 [WHERE \"coupons\".\"merchant_id\" = $1]")
     end
   end
 end
