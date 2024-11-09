@@ -56,6 +56,7 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:data][:attributes][:code]).to eq(@coupon1.code)
       expect(json[:data][:attributes][:discount_type]).to eq(@coupon1.discount_type)
       expect(json[:data][:attributes][:discount_value]).to eq(@coupon1.discount_value)
+      expect(json[:data][:attributes][:active]).to eq(@coupon1.active)
       expect(json[:data][:attributes][:merchant_id]).to eq(@merchant1.id)
     end
   
@@ -89,6 +90,7 @@ RSpec.describe "Merchant coupons endpoints" do
         code: "GIVE5AWAY",
         discount_type: "dollar",
         discount_value: 5,
+        active: true,
         merchant_id: @merchant1.id
       }
       
@@ -100,6 +102,7 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:data][:attributes][:code]).to eq(body1[:code])
       expect(json[:data][:attributes][:discount_type]).to eq(body1[:discount_type])
       expect(json[:data][:attributes][:discount_value]).to eq(body1[:discount_value])
+      expect(json[:data][:attributes][:active]).to eq(body1[:active])
       expect(json[:data][:attributes][:merchant_id]).to eq(body1[:merchant_id])
     end
 
@@ -118,7 +121,7 @@ RSpec.describe "Merchant coupons endpoints" do
 
       expect(response).to have_http_status(:created)
       expect(json[:data][:attributes]).to_not include(:extra_field)
-      expect(json[:data][:attributes]).to include(:name, :code, :discount_type, :discount_value, :merchant_id)
+      expect(json[:data][:attributes]).to include(:name, :code, :discount_type, :discount_value, :active, :merchant_id)
     end
   end
 end
