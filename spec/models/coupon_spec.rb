@@ -6,7 +6,7 @@ describe Coupon, type: :model do
     it { should validate_presence_of(:code) }
     it { should validate_presence_of(:discount_type)}
     it { should validate_presence_of(:discount_value)}
-    it { should validate_presence_of(:active)}
+    it { should validate_inclusion_of(:active).in_array([true, false]) }    
     it { should validate_numericality_of(:discount_value).is_greater_than_or_equal_to(0)}
   end
 

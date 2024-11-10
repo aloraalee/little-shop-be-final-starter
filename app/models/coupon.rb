@@ -5,7 +5,7 @@ class Coupon < ApplicationRecord
   validates_presence_of :code 
   validates_presence_of :discount_type 
   validates_presence_of :discount_value 
-  validates_presence_of :active
+  validates :active, inclusion: { in: [true, false] }
   validates :discount_value, numericality: { greater_than_or_equal_to: 0 }
   validates :code, uniqueness: { case_sensitive: false }
   validate :merchant_active_coupon_limit
