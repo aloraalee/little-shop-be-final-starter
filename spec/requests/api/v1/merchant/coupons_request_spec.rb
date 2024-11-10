@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Merchant coupons endpoints" do
+RSpec.describe "Merchant Coupon endpoints" do
   before :each do
     @merchant1 = create(:merchant)
     @coupon1 = create(:coupon, merchant_id: @merchant1.id)
@@ -29,17 +29,17 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:data][1][:id]).to eq(@coupon2.id.to_s)
       expect(json[:data][2][:id]).to eq(@coupon3.id.to_s)
     end
-  end
 
-  it "should return 404 and error message when merchant is not found" do
-    get "/api/v1/merchants/100000/coupons"
+    it "should return 404 and error message when merchant is not found" do
+      get "/api/v1/merchants/100000/coupons"
 
-    json = JSON.parse(response.body, symbolize_names: true)
+      json = JSON.parse(response.body, symbolize_names: true)
 
-    expect(response).to have_http_status(:not_found)
-    expect(json[:message]).to eq("Your query could not be completed")
-    expect(json[:errors]).to be_a Array
-    expect(json[:errors].first).to eq("Couldn't find Merchant with 'id'=100000")
+      expect(response).to have_http_status(:not_found)
+      expect(json[:message]).to eq("Your query could not be completed")
+      expect(json[:errors]).to be_a Array
+      expect(json[:errors].first).to eq("Couldn't find Merchant with 'id'=100000")
+    end
   end
 
   describe "GET coupon by id" do
@@ -81,7 +81,7 @@ RSpec.describe "Merchant coupons endpoints" do
     end
   end
 
-  describe "POST coupon" do
+  describe "Create coupon" do
     it "should create a new coupon for a given merchant when all fields are provided" do
 
       body1 = {
@@ -123,49 +123,49 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:data][:attributes]).to_not include(:extra_field)
       expect(json[:data][:attributes]).to include(:name, :code, :discount_type, :discount_value, :active, :merchant_id)
     end
-  end
 
-  it "should only be able to have five active coupons" do
-    coupon4 = create(:coupon, merchant_id: @merchant1.id)
-    coupon5 = create(:coupon, merchant_id: @merchant1.id)
+    it "should only be able to have five active coupons" do
+      coupon4 = create(:coupon, merchant_id: @merchant1.id)
+      coupon5 = create(:coupon, merchant_id: @merchant1.id)
 
-    coupon6 = {
-      name: "Mail in advertising",
-      code: "COME2STORE",
-      discount_type: "percent",
-      discount_value: 20,
-      active: true,
-      merchant_id: @merchant1.id
-    }
+      coupon6 = {
+        name: "Mail in advertising",
+        code: "COME2STORE",
+        discount_type: "percent",
+        discount_value: 20,
+        active: true,
+        merchant_id: @merchant1.id
+      }
 
-    post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon6, as: :json
+      post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon6, as: :json
 
-    expect(response).to have_http_status(:too_many_requests)
-  end
+      expect(response).to have_http_status(:too_many_requests)
+    end
 
-  it "should only add coupons that have a unique code" do
-    coupon4 = {
-      name: "Mail in advertising Oct",
-      code: "COME2STORE",
-      discount_type: "percent",
-      discount_value: 20,
-      active: true,
-      merchant_id: @merchant1.id
-    }
+    it "should only add coupons that have a unique code" do
+      coupon4 = {
+        name: "Mail in advertising Oct",
+        code: "COME2STORE",
+        discount_type: "percent",
+        discount_value: 20,
+        active: true,
+        merchant_id: @merchant1.id
+      }
 
-    coupon5 = {
-      name: "Mail in advertising Nov",
-      code: "COME2STORE",
-      discount_type: "percent",
-      discount_value: 20,
-      active: true,
-      merchant_id: @merchant1.id
-    }
+      coupon5 = {
+        name: "Mail in advertising Nov",
+        code: "COME2STORE",
+        discount_type: "percent",
+        discount_value: 20,
+        active: true,
+        merchant_id: @merchant1.id
+      }
 
-    post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon4, as: :json
-    expect(response).to have_http_status(:created)
+      post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon4, as: :json
+      expect(response).to have_http_status(:created)
 
-    post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon5, as: :json
-    expect(response).to have_http_status(:unprocessable_content)
+      post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon5, as: :json
+      expect(response).to have_http_status(:unprocessable_content)
+    end
   end
 end

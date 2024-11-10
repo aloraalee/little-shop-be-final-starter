@@ -21,7 +21,7 @@ class Api::V1::Merchants::CouponsController < ApplicationController
 
   def create
     merchant = Merchant.find(params[:merchant_id])
-    # This needs to be taken out of the controller and put in the model
+    # Does this need to be taken out of the controller and put in the model?
     if merchant.coupons.where(active: true).count >= 5
       render json: { error: "This merchant has reached the maximum limit of 5 active coupons." }, status: :too_many_requests
       return
@@ -29,6 +29,7 @@ class Api::V1::Merchants::CouponsController < ApplicationController
     coupon = merchant.coupons.create!(coupon_params)
     render json: CouponSerializer.new(coupon), status: :created
   end
+
 
   private
 
