@@ -69,7 +69,6 @@ RSpec.describe "Merchant coupons endpoints" do
       expect(json[:meta][:coupon_used_count]).to eq(2)
     end
 
-
     it "should return 404 and error message when coupon is not found" do
       get "/api/v1/merchants/#{@merchant1.id}/coupons/100000"
 
@@ -142,7 +141,31 @@ RSpec.describe "Merchant coupons endpoints" do
     post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon6, as: :json
 
     expect(response).to have_http_status(:too_many_requests)
+  end
 
+  it "should only add coupons that have a unique code" do
+    coupon4 = {
+      name: "Mail in advertising Oct",
+      code: "COME2STORE",
+      discount_type: "percent",
+      discount_value: 20,
+      active: true,
+      merchant_id: @merchant1.id
+    }
 
+    coupon5 = {
+      name: "Mail in advertising Nov",
+      code: "COME2STORE",
+      discount_type: "percent",
+      discount_value: 20,
+      active: true,
+      merchant_id: @merchant1.id
+    }
+
+    post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon4, as: :json
+    expect(response).to have_http_status(:created)
+
+    post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon5, as: :json
+    expect(response).to have_http_status(:unprocessable_content)
   end
 end
