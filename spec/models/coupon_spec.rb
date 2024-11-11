@@ -57,5 +57,40 @@ describe Coupon, type: :model do
       expect(result[:meta]).to be_present
       expect(result[:meta][:coupon_used_count]).to eq(2)
     end
+
+    it 'returns only active coupons' do
+      coupon6 = create(:coupon, active: false, merchant_id: @merchant1.id)
+
+      result = Coupon.filtered_by_active({ filter: 'active' })
+      
+      expect(result).to match_array([@coupon1, @coupon2, @coupon3, @coupon4, @coupon5])
+      expect(result).not_to include(coupon6)
+    end
+
+    it 'returns only inactive coupons' do
+      coupon6 = create(:coupon, active: false, merchant_id: @merchant1.id)
+
+      result = Coupon.filtered_by_active({ filter: 'inactive' })
+      
+      expect(result).to match_array(coupon6)
+      expect(result).not_to include([@coupon1, @coupon2, @coupon3, @coupon4, @coupon5])
+    end
+
+    it "returns only all coupons if param is not 'active' or 'inactive' exactly" do
+      coupon6 = create(:coupon, active: false, merchant_id: @merchant1.id)
+
+      result = Coupon.filtered_by_active({ filter: 'activeness' })
+      
+      expect(result).to match_array([@coupon1, @coupon2, @coupon3, @coupon4, @coupon5, coupon6])
+    end
+
+    it "returns coupons that have invoices with a status 'packaged' " do
+      invoice_m1_6 = create(:invoice, status: 'packaged', merchant_id: @merchant1.id, coupon_id:@coupon3.id)
+
+      result = Coupon.with_invoice_status
+
+      expect(result).to match_array(@coupon3)
+      expect(result).not_to include([@coupon1, @coupon2, @coupon4, @coupon5])
+    end
   end
 end
