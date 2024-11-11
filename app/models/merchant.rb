@@ -19,6 +19,10 @@ class Merchant < ApplicationRecord
     items.count
   end
 
+  def coupon_count
+    coupons.count
+  end
+  
   def distinct_customers
     # self.customers.distinct # This is possible due to the additional association on line 5
     
