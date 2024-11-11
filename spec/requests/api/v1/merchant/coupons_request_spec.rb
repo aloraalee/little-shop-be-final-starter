@@ -165,7 +165,7 @@ RSpec.describe "Merchant Coupon endpoints" do
       expect(response).to have_http_status(:created)
 
       post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon5, as: :json
-      expect(response).to have_http_status(:too_many_requests)
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 

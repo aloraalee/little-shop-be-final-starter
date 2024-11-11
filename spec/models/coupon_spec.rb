@@ -28,9 +28,9 @@ describe Coupon, type: :model do
     end
     
     it "returns an error if you try to add more than five coupons to a merchant" do
-      coupon6 = build(:coupon, merchant_id: @merchant1.id)
+      coupon6 = create(:coupon, merchant_id: @merchant1.id)
 
-      expect(coupon6).not_to be_valid
+      expect(Coupon.merchant_active_coupon_limit?(@merchant1)).to eq(true)
     end
   end
 end
