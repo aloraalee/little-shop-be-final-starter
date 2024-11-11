@@ -95,7 +95,7 @@ describe "Merchant endpoints", :type => :request do
       expect(json[:data][2][:attributes][:coupon_count]).to eq(7)
     end
 
-    xit "should return an invoice_coupon_count attribute when the param is present" do
+    it "should return an invoice_coupon_count attribute when the param is present" do
       merchant = create(:merchant)
       create_list(:coupon, 10, merchant_id: merchant.id)
 
