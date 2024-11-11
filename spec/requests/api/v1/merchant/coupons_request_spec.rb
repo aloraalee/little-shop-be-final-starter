@@ -165,7 +165,7 @@ RSpec.describe "Merchant Coupon endpoints" do
       expect(response).to have_http_status(:created)
 
       post "/api/v1/merchants/#{@merchant1.id}/coupons", params: coupon5, as: :json
-      expect(response).to have_http_status(:unprocessable_content)
+      expect(response).to have_http_status(:too_many_requests)
     end
   end
 
@@ -194,6 +194,41 @@ RSpec.describe "Merchant Coupon endpoints" do
       expect(json[:data][:attributes][:discount_value]).to eq(updated_coupon4[:discount_value])
       expect(json[:data][:attributes][:active]).to eq(updated_coupon4[:active])
       expect(json[:data][:attributes][:merchant_id]).to eq(@merchant2.id)
+    end
+
+    it "should update a coupon's active status with only that attribute" do
+      updated_coupon3 = {
+        active: false,
+      }
+
+      patch "/api/v1/merchants/#{@merchant1.id}/coupons/#{@coupon3.id}", params: { coupon:updated_coupon3 }
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+      expect(json[:data]).to be_a(Hash)
+      expect(json[:data][:id]).to eq("#{@coupon3.id}")
+      expect(json[:data][:type]).to eq("coupon")
+      expect(json[:data][:attributes][:active]).to eq(updated_coupon3[:active])
+      expect(json[:data][:attributes][:merchant_id]).to eq(@merchant1.id)
+    end
+    xit "should not be deactivated if there are pending invoices" do
+      invoice_m2_1 = create(:invoice, merchant_id: @merchant2.id, coupon_id:@coupon4.id)
+
+      updated_coupon4 = {
+        name: "Mail in advertising Oct",
+        code: "COME2STORE",
+        discount_type: "percent",
+        discount_value: 20,
+        active: false,
+        merchant_id: @merchant2.id
+      }
+
+      patch "/api/v1/merchants/#{@merchant2.id}/coupons/#{@coupon4.id}", params: { coupon:updated_coupon4 }
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to have_http_status(:unprocessable_content)
     end
   end
 end

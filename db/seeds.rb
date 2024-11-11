@@ -29,7 +29,34 @@ system(cmd)
 # Invoice.create! customer_id: 6, merchant_id: 8, status: "shipped", coupon_id: 4
 # Invoice.create! customer_id: 7, merchant_id: 8, status: "shipped", coupon_id: 4
 
+# Invoice.create! customer_id: 8, merchant_id: 8, status: "packaged", coupon_id: 4
+# Invoice.create! customer_id: 9, merchant_id: 8, status: "packaged", coupon_id: 4
+
+
+
+# Use this for coupons that cannot be updated to active:false
+#Coupon.joins(:invoices).where('invoices.status = packaged')
+# FRom merchant in group project:
+# def self.with_returned_status
+#   joins(:invoices).where(invoices: { status: 'returned' }).distinct
+# end
+
+# def self.with_item_count
+#   select("merchants.*, COUNT(items.id) AS item_count")
+#     .left_joins(:items)
+#     .group("merchants.id")
+# end
+
+
+
 #Invoice.create! customer_id: 7, merchant_id: 8, status: "shipped", coupon_id: 5 
 # This should not have worked because it has a coupon_id that does not match. 
 # Merchant 8 only has coupons 3 and 4
 # I deleted the instance I created, but I need to make a validation for this. 
+
+
+
+# I can probably do something like this from invoice model: 
+# def self.valid_status?(status)
+#   ["shipped", "returned", "packaged"].include?(status)
+# end
