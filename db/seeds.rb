@@ -36,16 +36,8 @@ system(cmd)
 
 # Use this for coupons that cannot be updated to active:false
 #Coupon.joins(:invoices).where('invoices.status = packaged')
-# FRom merchant in group project:
-# def self.with_returned_status
-#   joins(:invoices).where(invoices: { status: 'returned' }).distinct
-# end
 
-# def self.with_item_count
-#   select("merchants.*, COUNT(items.id) AS item_count")
-#     .left_joins(:items)
-#     .group("merchants.id")
-# end
+
 
 
 

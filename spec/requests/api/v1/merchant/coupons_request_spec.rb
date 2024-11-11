@@ -212,23 +212,26 @@ RSpec.describe "Merchant Coupon endpoints" do
       expect(json[:data][:attributes][:active]).to eq(updated_coupon3[:active])
       expect(json[:data][:attributes][:merchant_id]).to eq(@merchant1.id)
     end
-    xit "should not be deactivated if there are pending invoices" do
-      invoice_m2_1 = create(:invoice, merchant_id: @merchant2.id, coupon_id:@coupon4.id)
 
-      updated_coupon4 = {
+    it "should not be deactivated if there are pending invoices" do
+      invoice_m2_1 = create(:invoice, status: 'packaged', merchant_id: @merchant2.id, coupon_id:@coupon4.id)
+
+      updated_coupon_params = {
+        coupon: {
         name: "Mail in advertising Oct",
         code: "COME2STORE",
         discount_type: "percent",
         discount_value: 20,
         active: false,
         merchant_id: @merchant2.id
+        }
       }
 
-      patch "/api/v1/merchants/#{@merchant2.id}/coupons/#{@coupon4.id}", params: { coupon:updated_coupon4 }
+      patch "/api/v1/merchants/#{@merchant2.id}/coupons/#{@coupon4.id}", params: updated_coupon_params
 
       json = JSON.parse(response.body, symbolize_names: true)
 
-      expect(response).to have_http_status(:unprocessable_content)
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 end
