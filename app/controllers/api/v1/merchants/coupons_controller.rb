@@ -8,15 +8,7 @@ class Api::V1::Merchants::CouponsController < ApplicationController
   def show
     merchant = Merchant.find(params[:merchant_id])
     coupon = merchant.coupons.find(params[:id])
-    serialized_coupon =  CouponSerializer.new(coupon).serializable_hash
-
-    show_coupon_used_count = {
-      data: serialized_coupon[:data],
-      meta: {
-        coupon_used_count: coupon.invoices.count
-      }
-    }
-    render json: show_coupon_used_count
+    render json: coupon.serialized_with_usage_count
   end
 
   def create

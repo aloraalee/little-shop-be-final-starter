@@ -25,12 +25,37 @@ describe Coupon, type: :model do
       @coupon3 = create(:coupon, merchant_id: @merchant1.id)
       @coupon4 = create(:coupon, merchant_id: @merchant1.id)
       @coupon5 = create(:coupon, merchant_id: @merchant1.id)
+
+      @invoice_m1_1 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon1.id)
+      @invoice_m1_2 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon1.id)
+      @invoice_m1_3 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon2.id)
+      @invoice_m1_4 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon3.id)
+      @invoice_m1_5 = create(:invoice, merchant_id: @merchant1.id, coupon_id:@coupon3.id)
     end
     
     it "returns an error if you try to add more than five coupons to a merchant" do
       coupon6 = create(:coupon, merchant_id: @merchant1.id)
 
       expect(Coupon.merchant_active_coupon_limit?(@merchant1)).to eq(true)
+    end
+
+    it "returns the serialized coupon with usage count" do
+      result = @coupon1.serialized_with_usage_count
+
+      expect(result).to be_a(Hash)
+      expect(result[:data]).to be_present
+      expect(result[:data][:id]).to eq(@coupon1.id.to_s)
+      expect(result[:data][:type]).to eq(:coupon)
+      expect(result[:data][:attributes]).to include(
+        :name,
+        :code,
+        :discount_type,
+        :discount_value,
+        :active,
+        :merchant_id
+      )
+      expect(result[:meta]).to be_present
+      expect(result[:meta][:coupon_used_count]).to eq(2)
     end
   end
 end
