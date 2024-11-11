@@ -30,4 +30,14 @@ class Coupon < ApplicationRecord
   def self.with_invoice_status
     joins(:invoices).where(invoices: { status: 'packaged' })
   end
+
+  def self.filtered_by_active(params)
+    if params[:filter] == 'active' 
+      where(active: true)
+    elsif params[:filter] == 'inactive'
+      where(active: false)
+    else
+      all
+    end
+  end
 end

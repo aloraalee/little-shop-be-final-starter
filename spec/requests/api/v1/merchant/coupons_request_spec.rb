@@ -234,4 +234,26 @@ RSpec.describe "Merchant Coupon endpoints" do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  describe "filter by active or deactive" do
+    it "can filter by active" do 
+
+      updated_coupon3 = {
+        active: false,
+      }
+      patch "/api/v1/merchants/#{@merchant1.id}/coupons/#{@coupon3.id}", params: { coupon:updated_coupon3 }
+      
+      get "/api/v1/merchants/#{@merchant1.id}/coupons", params: { filter: 'active' }
+
+      expect(response).to be_successful
+      coupons = JSON.parse(response.body, symbolize_names: true)[:data]
+      expect(coupons.count).to eq(2)
+
+      get "/api/v1/merchants/#{@merchant1.id}/coupons", params: { filter: 'inactive' }
+
+      expect(response).to be_successful
+      coupons = JSON.parse(response.body, symbolize_names: true)[:data]
+      expect(coupons.count).to eq(1)
+    end
+  end
 end
