@@ -23,8 +23,8 @@ class Merchant < ApplicationRecord
     coupons.count
   end
 
-  def invoice_count
-    invoices.count
+  def invoice_coupon_count
+    invoices.joins(:coupon).count
   end
 
   def distinct_customers

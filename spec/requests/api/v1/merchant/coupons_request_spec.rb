@@ -235,7 +235,7 @@ RSpec.describe "Merchant Coupon endpoints" do
     end
   end
 
-  describe "filter by active or deactive" do
+  describe "filter by active or inactive" do
     it "can filter by active" do 
 
       updated_coupon3 = {
@@ -254,6 +254,12 @@ RSpec.describe "Merchant Coupon endpoints" do
       expect(response).to be_successful
       coupons = JSON.parse(response.body, symbolize_names: true)[:data]
       expect(coupons.count).to eq(1)
+
+      get "/api/v1/merchants/#{@merchant1.id}/coupons", params: { filter: 'activeness' }
+
+      expect(response).to be_successful
+      coupons = JSON.parse(response.body, symbolize_names: true)[:data]
+      expect(coupons.count).to eq(3)
     end
   end
 end

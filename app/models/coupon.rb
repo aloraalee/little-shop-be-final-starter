@@ -23,10 +23,6 @@ class Coupon < ApplicationRecord
     merchant.coupons.where(active: true).count >= 5
   end
 
-  def self.active?
-    coupon_params[:active] == false || coupon_params[:active] == 'false' && coupon.active?
-  end
-
   def self.with_invoice_status
     joins(:invoices).where(invoices: { status: 'packaged' })
   end

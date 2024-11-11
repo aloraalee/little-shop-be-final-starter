@@ -15,8 +15,8 @@ class MerchantSerializer
   end
 
   attribute :invoice_count, if: Proc.new { |merchant, params|
-    params && params[:invoice_count] == true
+    params && params[:invoice_coupon_count] == true
     } do |merchant|
-    merchant.invoice_count
+    merchant.invoice_coupon_count
   end
 end

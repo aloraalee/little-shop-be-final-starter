@@ -27,7 +27,7 @@ class Api::V1::Merchants::CouponsController < ApplicationController
 
   def update
     coupon = Coupon.find(params[:id])
-    if coupon_params[:active] == false || coupon_params[:active] == 'false' && coupon.active?
+    if coupon_params[:active] == false || coupon_params[:active] == 'false' 
       if Coupon.with_invoice_status.exists?(id: coupon.id)
         render json: { error: "This coupon has a pending invoice." }, status: :unprocessable_content
         return
