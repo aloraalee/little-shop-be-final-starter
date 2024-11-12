@@ -32,14 +32,16 @@ system(cmd)
 # Invoice.create! customer_id: 4, merchant_id: 8, status: "shipped", coupon_id: 3
 # id = 4848
 # Invoice.create! customer_id: 5, merchant_id: 8, status: "shipped", coupon_id: 3
+# id = 4854
+# Invoice.create! customer_id: 10, merchant_id: 8, status: "shipped", coupon_id: 3
+# id = 4848
+# Invoice.create! customer_id: 3, merchant_id: 8, status: "shipped", coupon_id: 3
 
 
 # id = 4849
 # Invoice.create! customer_id: 6, merchant_id: 8, status: "shipped", coupon_id: 4
 # id = 4850
 # Invoice.create! customer_id: 7, merchant_id: 8, status: "shipped", coupon_id: 4
-
-
 # id = 4852
 # Invoice.create! customer_id: 8, merchant_id: 8, status: "packaged", coupon_id: 4
 # id = 4853
