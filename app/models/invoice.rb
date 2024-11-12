@@ -19,9 +19,15 @@ class Invoice < ApplicationRecord
 
   def calculate_total_after_discount
     if coupon.discount_type == "dollar"
-      calculate_total - coupon.discount_value
+      if (calculate_total - coupon.discount_value) < 0
+        0
+      else calculate_total - coupon.discount_value
+      end
     else coupon.discount_type == "percent"
-      calculate_total * (1-(coupon.discount_value / 100))
+      if (calculate_total * (1-(coupon.discount_value / 100))) < 0
+        0
+      else calculate_total * (1-(coupon.discount_value / 100))
+      end
     end
   end
 
