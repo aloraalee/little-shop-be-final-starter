@@ -8,6 +8,23 @@ class Invoice < ApplicationRecord
   validates :status, inclusion: { in: ["shipped", "packaged", "returned"] }
   validate :coupon_id_matches_merchant, if: :coupon_present?
 
+  def calculate_total
+    acc = 0
+    invoice_items.each do |invoice_item|
+      invoice_item_total = invoice_item.quantity * invoice_item.unit_price
+      acc += invoice_item_total
+    end
+    acc    
+  end
+
+  def calculate_total_after_discount
+    if coupon.discount_type == "dollar"
+      calculate_total - coupon.discount_value
+    else coupon.discount_type == "percent"
+      calculate_total * (1-(coupon.discount_value / 100))
+    end
+  end
+
 private
 
   def coupon_id_matches_merchant

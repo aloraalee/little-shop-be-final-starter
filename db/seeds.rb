@@ -14,6 +14,7 @@ system(cmd)
 
 # The following should be created in the rails console:
 
+
 # Coupon.create! name:"Buy One Get One 50% off", code:"BOGO50", discount_type:"percent", discount_value:25.00, merchant_id:5
 # Coupon.create! name:"Flash Sale", code:"FLASH40NOW", discount_type:"percent", discount_value:40.00, merchant_id:5
 # Coupon.create! name:"Sign Up With Your Email", code:"EMAIL20", discount_type:"percent", discount_value:20.00, merchant_id:8
@@ -23,6 +24,7 @@ system(cmd)
 # Coupon.create! name: "Holiday Special", code: "HOLIDAY50", discount_type: "dollar", discount_value: 50.00, merchant_id: 2
 # Coupon.create! name: "Loyalty Reward", code: "LOYAL10", discount_type: "dollar", discount_value: 15.00, merchant_id: 6
 # Coupon.create! name: "Free Shipping", code: "SHIPFREE", discount_type: "dollar", discount_value: 7.00, merchant_id: 4
+
 
 # id = 4846 (created automatically, but listed for reference)
 # Invoice.create! customer_id: 3, merchant_id: 8, status: "shipped", coupon_id: 3 
@@ -47,6 +49,24 @@ system(cmd)
 # This should not work because it has a coupon.merchant_id that does not match the merchant_id. 
 # Merchant 8 only has coupons 3 and 4
 #Invoice.create! customer_id: 7, merchant_id: 8, status: "shipped", coupon_id: 5 
+
+
+# id = 2511
+# Item.create! name: "Lite Brite", description: "really cool", unit_price: 15, merchant_id: 8
+# id = 2512
+# Item.create! name: "Furby", description: "big eyes that blink", unit_price: 30, merchant_id: 8
+# id = 2513
+# Item.create! name: "Beanie Babies", description: "stuffed animals with tiny balls for stuffing", unit_price: 5, merchant_id: 8
+
+
+# id = 21690
+# InvoiceItem.create! item_id: 2511, invoice_id: 4849, quantity: 4, unit_price: 20
+# id = 21691
+# InvoiceItem.create! item_id: 2512, invoice_id: 4849, quantity: 1, unit_price: 35
+# id = 21692
+# InvoiceItem.create! item_id: 2513, invoice_id: 4849, quantity: 4, unit_price: 6.50
+
+
 
 
 
