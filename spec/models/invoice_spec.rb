@@ -46,4 +46,12 @@ describe "Merchant coupons endpoints" do
     expect(@invoice_m1_1.calculate_total_after_discount).to eq(50)
     expect(@invoice_m1_3.calculate_total_after_discount).to eq(32)
   end
+
+  it "should return 0 if discount is more than the total" do
+    coupon6 = create(:coupon, discount_type: "dollar", discount_value: 20, merchant_id: @merchant1.id)
+    invoice_m1_6 = create(:invoice, merchant_id: @merchant1.id, coupon_id: coupon6.id)
+    invoice_item_m1_4 = create(:invoice_item, quantity: 1, unit_price: 15, invoice_id: invoice_m1_6.id)
+
+    expect(invoice_m1_6.calculate_total_after_discount).to eq(0)
+  end
 end

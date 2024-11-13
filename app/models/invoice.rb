@@ -24,10 +24,7 @@ class Invoice < ApplicationRecord
       else calculate_total - coupon.discount_value
       end
     else coupon.discount_type == "percent"
-      if (calculate_total * (1-(coupon.discount_value / 100))) < 0
-        0
-      else calculate_total * (1-(coupon.discount_value / 100))
-      end
+      calculate_total * (1-(coupon.discount_value / 100))
     end
   end
 
