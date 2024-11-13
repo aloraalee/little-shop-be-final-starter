@@ -1,8 +1,6 @@
 # Little Shop | Final Project | Backend Starter Repo
 
-This repository is the completed API for use with the Mod 2 Group Project. The FE repo for Little Shop lives [here](https://github.com/turingschool-examples/little-shop-fe-vite).
-
-This repo can be used as the starter repo for the Mod 2 final project.
+The FE repo for Little Shop lives [here](https://github.com/aloraalee/little-shop-fe-final-starter.git).
 
 ## Setup
 
